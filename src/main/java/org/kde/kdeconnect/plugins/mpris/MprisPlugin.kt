@@ -200,6 +200,8 @@ class MprisPlugin : Plugin() {
     }
 
     private val players = ConcurrentHashMap<String, MprisPlayer>()
+    @Volatile
+    private var lastPlayingPlayer: String? = null
     private var supportAlbumArtPayload = false
     private val playerStatusUpdated = ConcurrentHashMap<String, () -> Unit>()
     private val playerListUpdated = ConcurrentHashMap<String, () -> Unit>()
@@ -302,6 +304,9 @@ class MprisPlugin : Plugin() {
                     playerStatus.lastPositionTime = SystemClock.elapsedRealtime()
                 }
                 playerStatus.isPlaying = np.getBoolean("isPlaying", playerStatus.isPlaying)
+                if (playerStatus.isPlaying) {
+                    lastPlayingPlayer = playerStatus.playerName
+                }
                 playerStatus.isPlayAllowed = np.getBoolean("canPlay", playerStatus.isPlayAllowed)
                 playerStatus.isPauseAllowed = np.getBoolean("canPause", playerStatus.isPauseAllowed)
                 playerStatus.isGoNextAllowed = np.getBoolean("canGoNext", playerStatus.isGoNextAllowed)
@@ -471,6 +476,20 @@ class MprisPlugin : Plugin() {
         get() = players.values.firstOrNull(MprisPlayer::isPlaying)
 
     fun hasPlayer(player: MprisPlayer): Boolean = players.containsValue(player)
+
+    /**
+     * Pauses every playing player, or if nothing is playing resumes the player that played last.
+     */
+    fun sendGlobalPlayPause() {
+        val playing = players.values.filter(MprisPlayer::isPlaying)
+        if (playing.isNotEmpty()) {
+            playing.forEach(MprisPlayer::sendPause)
+            return
+        }
+        val player = lastPlayingPlayer?.let { players[it] }
+            ?: players.values.firstOrNull(MprisPlayer::isPlayAllowed)
+        player?.sendPlay()
+    }
 
     private fun requestPlayerList() {
         val np = NetworkPacket(PACKET_TYPE_MPRIS_REQUEST).apply {

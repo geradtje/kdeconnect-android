@@ -14,11 +14,13 @@ import android.speech.SpeechRecognizer
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.preference.PreferenceManager
 import org.kde.kdeconnect.KdeConnect
 import org.kde.kdeconnect.base.BaseActivity
 import org.kde.kdeconnect.extensions.viewBinding
+import org.kde.kdeconnect.plugins.mpris.MprisPlugin
 import org.kde.kdeconnect.ui.PermissionsAlertDialogFragment
 import org.kde.kdeconnect_tp.R
 import org.kde.kdeconnect_tp.databinding.ActivityBigscreenBinding
@@ -74,6 +76,14 @@ class BigscreenActivity : BaseActivity<ActivityBigscreenBinding>() {
         binding.closeButton.setOnClickListener { plugin.sendClose() }
         binding.showTasksButton.setOnClickListener { plugin.sendShowAllTasks() }
         binding.fullscreenButton.setOnClickListener { plugin.sendFullscreen() }
+        binding.playPauseButton.setOnClickListener {
+            val mpris = KdeConnect.getInstance().getDevicePlugin<MprisPlugin>(deviceId)
+            if (mpris == null) {
+                Toast.makeText(this, R.string.bigscreen_play_pause_unavailable, Toast.LENGTH_SHORT).show()
+            } else {
+                mpris.sendGlobalPlayPause()
+            }
+        }
         binding.micButton.setOnClickListener {
             if (plugin.hasMicPermission()) {
                 activateSTT()

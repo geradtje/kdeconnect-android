@@ -134,6 +134,17 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
             style="@style/KdeConnectButton.IconButton" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/play_pause_button"
+            app:layout_column="1"
+            app:layout_row="3"
+            app:layout_columnWeight="1"
+            app:layout_rowWeight="1"
+            android:contentDescription="@string/bigscreen_play_pause"
+            app:iconSize="32dp"
+            app:icon="@drawable/ic_play_pause_24dp"
+            style="@style/KdeConnectButton.IconButton" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/fullscreen_button"
             app:layout_column="2"
             app:layout_row="3"
