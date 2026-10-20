@@ -35,6 +35,18 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
             android:importantForAccessibility="no"
             android:text="@string/mousepad_info" />
 
+        <ImageView
+            android:id="@+id/scroll_wheel"
+            android:layout_width="110dp"
+            android:layout_height="120dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:padding="24dp"
+            android:background="@drawable/scroll_wheel_background"
+            android:contentDescription="@string/mousepad_scroll_wheel"
+            android:src="@drawable/ic_unfold_more_24dp" />
+
         <org.kde.kdeconnect.plugins.mousepad.KeyListenerView
             android:id="@+id/keyListener"
             android:layout_width="wrap_content"

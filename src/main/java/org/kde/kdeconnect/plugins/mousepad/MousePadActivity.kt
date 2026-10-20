@@ -19,6 +19,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -33,6 +34,7 @@ import org.kde.kdeconnect.ui.PluginSettingsActivity
 import org.kde.kdeconnect_tp.R
 import org.kde.kdeconnect_tp.databinding.ActivityMousepadBinding
 import kotlin.math.abs
+import kotlin.math.hypot
 import kotlin.math.pow
 
 class MousePadActivity :
@@ -64,6 +66,12 @@ class MousePadActivity :
     private var accumulatedDistanceY: Double = 0.0
     private var pendingShowKeyboard: Boolean = false
     private var keyboardShown: Boolean = false
+    private var touchSlop: Int = 0
+    private var wheelDownX: Float = 0f
+    private var wheelDownY: Float = 0f
+    private var wheelPrevX: Float = 0f
+    private var wheelPrevY: Float = 0f
+    private var wheelScrolling: Boolean = false
 
     private lateinit var mDetector: GestureDetector
     private var mSensorManager: SensorManager? = null
@@ -141,6 +149,12 @@ class MousePadActivity :
         binding.mouseClickLeft.setOnClickListener { sendLeftClick() }
         binding.mouseClickMiddle.setOnClickListener { sendMiddleClick() }
         binding.mouseClickRight.setOnClickListener { sendRightClick() }
+        binding.scrollWheel.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            sendMiddleClick()
+        }
+        binding.scrollWheel.setOnTouchListener(::onScrollWheelTouch)
+        touchSlop = ViewConfiguration.get(this).scaledTouchSlop
 
         deviceId = intent.getStringExtra(EXTRA_DEVICE_ID) ?: ""
         if (deviceId.isEmpty()) {
@@ -408,6 +422,53 @@ class MousePadActivity :
         return true
     }
 
+    // One finger scrolling on the scroll wheel area, a tap without moving is a middle click
+    private fun onScrollWheelTouch(v: View, event: MotionEvent): Boolean {
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                wheelDownX = event.rawX
+                wheelDownY = event.rawY
+                wheelPrevX = event.rawX
+                wheelPrevY = event.rawY
+                wheelScrolling = false
+                accumulatedDistanceX = 0.0
+                accumulatedDistanceY = 0.0
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (!wheelScrolling && hypot(event.rawX - wheelDownX, event.rawY - wheelDownY) < touchSlop) {
+                    return true
+                }
+                wheelScrolling = true
+
+                var distanceX = wheelPrevX - event.rawX
+                var distanceY = wheelPrevY - event.rawY
+                wheelPrevX = event.rawX
+                wheelPrevY = event.rawY
+
+                if (abs(distanceX) < abs(distanceY) * DirectionLockRatio) {
+                    distanceX = 0f
+                } else if (abs(distanceY) < abs(distanceX) * DirectionLockRatio) {
+                    distanceY = 0f
+                }
+
+                accumulatedDistanceX += distanceX * scrollCoefficient
+                accumulatedDistanceY += distanceY * scrollCoefficient
+
+                if (abs(accumulatedDistanceX) > MinDistanceToSendScroll || abs(accumulatedDistanceY) > MinDistanceToSendScroll) {
+                    sendScroll(-scrollDirection * accumulatedDistanceX, scrollDirection * accumulatedDistanceY)
+                    accumulatedDistanceX = 0.0
+                    accumulatedDistanceY = 0.0
+                }
+            }
+            MotionEvent.ACTION_UP -> {
+                if (!wheelScrolling) {
+                    v.performClick()
+                }
+            }
+        }
+        return true
+    }
+
     override fun onLongPress(e: MotionEvent) {
         if (!doubleTapDragEnabled && !dragging) {
             window.decorView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
@@ -632,6 +693,12 @@ class MousePadActivity :
             binding.mouseButtons.visibility = View.VISIBLE
         } else {
             binding.mouseButtons.visibility = View.GONE
+        }
+
+        if (p.getBoolean(getString(R.string.mousepad_scroll_wheel_enabled_pref), true)) {
+            binding.scrollWheel.visibility = View.VISIBLE
+        } else {
+            binding.scrollWheel.visibility = View.GONE
         }
 
         doubleTapDragEnabled = p.getBoolean(getString(R.string.mousepad_doubletap_drag_enabled_pref), true)

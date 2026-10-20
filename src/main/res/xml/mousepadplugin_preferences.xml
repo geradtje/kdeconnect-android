@@ -91,6 +91,13 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
         android:title="@string/mousepad_mouse_buttons_title" />
 
     <SwitchPreference
+        android:id="@+id/mousepad_scroll_wheel_enabled_pref"
+        android:defaultValue="true"
+        android:key="@string/mousepad_scroll_wheel_enabled_pref"
+        android:title="@string/mousepad_scroll_wheel_title"
+        android:summary="@string/mousepad_scroll_wheel_summary" />
+
+    <SwitchPreference
         android:id="@+id/mousepad_double_tap_drag_enabled_pref"
         android:defaultValue="true"
         android:key="@string/mousepad_doubletap_drag_enabled_pref"
