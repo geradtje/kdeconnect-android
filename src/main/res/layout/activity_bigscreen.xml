@@ -24,8 +24,8 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/home_button"
-            app:layout_column="0"
-            app:layout_row="0"
+            app:layout_column="2"
+            app:layout_row="1"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             android:contentDescription="@string/bigscreen_home"
@@ -36,7 +36,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
         <com.google.android.material.button.MaterialButton
             android:id="@+id/up_button"
             app:layout_column="1"
-            app:layout_row="0"
+            app:layout_row="1"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             android:contentDescription="@string/bigscreen_up"
@@ -46,9 +46,9 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mic_button"
-            app:layout_column="2"
+            app:layout_column="0"
             app:layout_columnWeight="1"
-            app:layout_row="2"
+            app:layout_row="0"
             app:layout_rowWeight="1"
             android:contentDescription="@string/bigscreen_mic"
             app:iconSize="32dp"
@@ -57,19 +57,19 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/left_button"
-            app:layout_column="0"
-            app:layout_row="1"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
+            style="@style/KdeConnectButton.IconButton"
             android:contentDescription="@string/bigscreen_left"
-            app:iconSize="42dp"
             app:icon="@drawable/outline_arrow_left_24"
-            style="@style/KdeConnectButton.IconButton" />
+            app:iconSize="42dp"
+            app:layout_column="0"
+            app:layout_columnWeight="1"
+            app:layout_row="2"
+            app:layout_rowWeight="1" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/select_button"
             app:layout_column="1"
-            app:layout_row="1"
+            app:layout_row="2"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             android:contentDescription="@string/bigscreen_select"
@@ -80,7 +80,7 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
         <com.google.android.material.button.MaterialButton
             android:id="@+id/right_button"
             app:layout_column="2"
-            app:layout_row="1"
+            app:layout_row="2"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             android:contentDescription="@string/bigscreen_right"
@@ -88,28 +88,28 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
             app:icon="@drawable/outline_arrow_right_24"
             style="@style/KdeConnectButton.IconButton" />
 
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/down_button"
-            app:layout_column="1"
-            app:layout_row="2"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
+            style="@style/KdeConnectButton.IconButton"
             android:contentDescription="@string/bigscreen_down"
-            app:iconSize="42dp"
             app:icon="@drawable/outline_arrow_drop_down_24"
-            style="@style/KdeConnectButton.IconButton"  />
-
+            app:iconSize="42dp"
+            app:layout_column="1"
+            app:layout_columnWeight="1"
+            app:layout_row="3"
+            app:layout_rowWeight="1" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/back_button"
-            app:layout_column="0"
-            app:layout_row="2"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
+            style="@style/KdeConnectButton.IconButton"
             android:contentDescription="@string/bigscreen_back"
-            app:iconSize="32dp"
             app:icon="@drawable/ic_arrow_back_black_24dp"
-            style="@style/KdeConnectButton.IconButton"  />
+            app:iconSize="32dp"
+            app:layout_column="0"
+            app:layout_columnWeight="1"
+            app:layout_row="1"
+            app:layout_rowWeight="1" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/close_button"
@@ -135,19 +135,19 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/play_pause_button"
-            app:layout_column="1"
-            app:layout_row="3"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1"
+            style="@style/KdeConnectButton.IconButton"
             android:contentDescription="@string/bigscreen_play_pause"
-            app:iconSize="32dp"
             app:icon="@drawable/ic_play_pause_24dp"
-            style="@style/KdeConnectButton.IconButton" />
+            app:iconSize="32dp"
+            app:layout_column="2"
+            app:layout_columnWeight="1"
+            app:layout_row="3"
+            app:layout_rowWeight="1" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/fullscreen_button"
-            app:layout_column="2"
-            app:layout_row="3"
+            app:layout_column="1"
+            app:layout_row="0"
             app:layout_columnWeight="1"
             app:layout_rowWeight="1"
             android:contentDescription="@string/bigscreen_fullscreen"
