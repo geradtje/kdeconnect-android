@@ -105,8 +105,12 @@ class KeyListenerView(
             // Since getDisplayLabel will always have a value, we have to check for special keys before
             val keyCharacter = event.displayLabel
             np.set("key", keyCharacter.toString().lowercase())
+        } else if (!modifier && event.unicodeChar != 0) {
+            // A normal key, but still not handled by the KeyInputConnection (happens with numbers).
+            // Send it as text so shifted characters get the same treatment as typed text.
+            sendChars(event.unicodeChar.toChar().toString())
+            return true
         } else {
-            // A normal key, but still not handled by the KeyInputConnection (happens with numbers)
             np.set("key", event.unicodeChar.toChar().toString())
         }
 

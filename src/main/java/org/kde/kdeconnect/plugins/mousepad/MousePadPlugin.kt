@@ -193,9 +193,40 @@ class MousePadPlugin : Plugin() {
     }
 
     fun sendText(content: String) {
+        // WORKAROUND: the desktop's Wayland input path drops the shift level when turning a
+        // character into a keycode, so "@" arrives as "2". Send shifted characters as their
+        // unshifted key plus an explicit shift instead. Assumes a US layout on the desktop.
+        val plain = StringBuilder()
+        for (c in content) {
+            val unshifted = usShiftedToUnshifted(c)
+            if (unshifted == null) {
+                plain.append(c)
+                continue
+            }
+            if (plain.isNotEmpty()) {
+                sendPlainText(plain.toString())
+                plain.clear()
+            }
+            val np = NetworkPacket(PACKET_TYPE_MOUSEPAD_REQUEST)
+            np["shift"] = true
+            np["key"] = unshifted.toString()
+            sendPacket(np)
+        }
+        if (plain.isNotEmpty()) {
+            sendPlainText(plain.toString())
+        }
+    }
+
+    private fun sendPlainText(content: String) {
         val np = NetworkPacket(PACKET_TYPE_MOUSEPAD_REQUEST)
         np["key"] = content
         sendPacket(np)
+    }
+
+    private fun usShiftedToUnshifted(c: Char): Char? {
+        if (c in 'A'..'Z') return c.lowercaseChar()
+        val index = US_SHIFTED_SYMBOLS.indexOf(c)
+        return if (index >= 0) US_UNSHIFTED_SYMBOLS[index] else null
     }
 
     fun sendPacket(np: NetworkPacket) {
@@ -208,5 +239,7 @@ class MousePadPlugin : Plugin() {
     companion object {
         const val PACKET_TYPE_MOUSEPAD_REQUEST: String = "kdeconnect.mousepad.request"
         private const val PACKET_TYPE_MOUSEPAD_KEYBOARDSTATE = "kdeconnect.mousepad.keyboardstate"
+        private const val US_SHIFTED_SYMBOLS = "~!@#$%^&*()_+{}|:\"<>?"
+        private const val US_UNSHIFTED_SYMBOLS = "`1234567890-=[]\\;',./"
     }
 }
