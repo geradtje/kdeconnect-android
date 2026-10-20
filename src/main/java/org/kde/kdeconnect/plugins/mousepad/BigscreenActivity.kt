@@ -72,6 +72,8 @@ class BigscreenActivity : BaseActivity<ActivityBigscreenBinding>() {
         binding.homeButton.setOnClickListener { plugin.sendHome() }
         binding.backButton.setOnClickListener { plugin.sendBack() }
         binding.closeButton.setOnClickListener { plugin.sendClose() }
+        binding.showTasksButton.setOnClickListener { plugin.sendShowAllTasks() }
+        binding.fullscreenButton.setOnClickListener { plugin.sendFullscreen() }
         binding.micButton.setOnClickListener {
             if (plugin.hasMicPermission()) {
                 activateSTT()

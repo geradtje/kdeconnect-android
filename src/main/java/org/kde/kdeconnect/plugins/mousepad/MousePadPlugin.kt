@@ -178,6 +178,20 @@ class MousePadPlugin : Plugin() {
         device.sendPacket(np)
     }
 
+    fun sendShowAllTasks() {
+        // Meta+W opens the KWin Overview
+        val np = NetworkPacket(PACKET_TYPE_MOUSEPAD_REQUEST)
+        np["super"] = true
+        np["key"] = "w"
+        device.sendPacket(np)
+    }
+
+    fun sendFullscreen() {
+        val np = NetworkPacket(PACKET_TYPE_MOUSEPAD_REQUEST)
+        np["specialKey"] = KeyListenerView.SpecialKeysMap.get(KeyEvent.KEYCODE_F11)
+        device.sendPacket(np)
+    }
+
     fun sendText(content: String) {
         val np = NetworkPacket(PACKET_TYPE_MOUSEPAD_REQUEST)
         np["key"] = content

@@ -498,6 +498,8 @@ SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only OR LicenseRef-KDE-Accepted
 
     <string name="bigscreen_home">Home</string>
     <string name="bigscreen_close">Close</string>
+    <string name="bigscreen_show_tasks">Show all tasks</string>
+    <string name="bigscreen_fullscreen">Fullscreen</string>
     <string name="bigscreen_up">Up</string>
     <string name="bigscreen_left">Left</string>
     <string name="bigscreen_select">Select</string>
